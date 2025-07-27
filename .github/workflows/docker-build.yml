@@ -25,6 +25,6 @@ jobs:
       - name: Build and Push Docker Image
         uses: docker/build-push-action@v5
         with:
-          context: ./back-chat
+          context: ./chat-app
           push: true
           tags: your-dockerhub-username/chat-app-backend:latest
