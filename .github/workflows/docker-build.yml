@@ -27,4 +27,4 @@ jobs:
         with:
           context: ./chat-app
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/chat-app-backend:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/chatapp:latest
