@@ -22,8 +22,7 @@ public class ChatAppApplication {
 				System.setProperty(entry.getKey(), entry.getValue());
 			});
 
-			System.out.println("✅ .env file loaded successfully");
-			System.out.println("MONGODB_URI = " + System.getProperty("MONGODB_URI")); // For debug
+			
 
 		} catch (Exception e) {
 			System.out.println("⚠️ Could not load .env file: " + e.getMessage());
