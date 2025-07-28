@@ -1,7 +1,6 @@
 package com.room_chat.app.chat_app.controllers;
 
 
-import com.room_chat.app.chat_app.config.AppConstants;
 import com.room_chat.app.chat_app.entities.Message;
 import com.room_chat.app.chat_app.entities.Room;
 import com.room_chat.app.chat_app.payloads.MessageRequest;
@@ -10,7 +9,6 @@ import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.time.LocalDateTime;
@@ -20,7 +18,6 @@ Chat Concepts:
 
  */
 @Controller
-@CrossOrigin(AppConstants.FRONTEND_BASE_URL)
 public class ChatController {
 
 

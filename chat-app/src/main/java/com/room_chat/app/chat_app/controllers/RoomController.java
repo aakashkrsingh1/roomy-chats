@@ -1,6 +1,5 @@
 package com.room_chat.app.chat_app.controllers;
 
-import com.room_chat.app.chat_app.config.AppConstants;
 import com.room_chat.app.chat_app.entities.Message;
 import com.room_chat.app.chat_app.entities.Room;
 import com.room_chat.app.chat_app.repositories.RoomRepository;
@@ -12,7 +11,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/rooms")
-@CrossOrigin(AppConstants.FRONTEND_BASE_URL)
+@CrossOrigin
 public class RoomController {
     private RoomRepository roomRepository;
 
