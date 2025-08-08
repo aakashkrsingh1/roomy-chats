@@ -30,8 +30,12 @@ https://roomy-chats.vercel.app/
   - GitHub Actions workflow builds and pushes a Docker image to Docker Hub whenever changes are pushed to `main`.  
   - Render is configured to automatically pull the latest image from Docker Hub and redeploy the backend.  
   - Environment variables such as MongoDB URI and CORS origins are managed via the Render Dashboard.
-## Demo: 
+## Screenshots: 
+- **./**
+  - <img width="1517" height="1167" alt="image" src="https://github.com/user-attachments/assets/f1f91f3b-250f-41d6-8d7e-e6e606c33014" />
+- **./chat**
+  - <img width="1517" height="1167" alt="image" src="https://github.com/user-attachments/assets/feb2fe14-c513-495f-9d67-77e2cd96cc8c" />
 
 
-<video src="https://github.com/user-attachments/assets/fea7ab57-3602-47ff-87aa-84abfeda69bd"></video>
+
 
