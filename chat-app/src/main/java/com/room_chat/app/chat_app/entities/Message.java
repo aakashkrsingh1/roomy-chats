@@ -16,10 +16,13 @@ public class Message {
     private String sender;
     private String content;
     private LocalDateTime timeStamp;
+    private String messageType; // TEXT, IMAGE, PDF, FILE
+    private Attachment attachment; // optional
 
     public Message(String sender, String content) {
         this.sender = sender;
         this.content = content;
         this.timeStamp= LocalDateTime.now();
+        this.messageType = "TEXT";
     }
 }
