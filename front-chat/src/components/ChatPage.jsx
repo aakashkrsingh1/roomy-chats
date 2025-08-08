@@ -8,6 +8,7 @@ import toast from "react-hot-toast";
 import { Stomp } from "@stomp/stompjs";
 import { getMessages } from "../services/RoomService";
 import { timeAgo } from "../config/helper";
+import { uploadFile } from "../services/UploadService";
 
 const ChatPage = () => {
     const navigate = useNavigate();
@@ -16,6 +17,8 @@ const ChatPage = () => {
     const [input, setInput] = useState("");
     const chatBoxRef = useRef(null);
     const [stompClient, setStompClient] = useState(null);
+    const fileInputRef = useRef(null);
+    const [isUploading, setIsUploading] = useState(false);
 
     useEffect(() => {
         if (!connected) {
@@ -67,10 +70,41 @@ const ChatPage = () => {
             const message = {
                 sender: currentUser,
                 content: input,
-                roomId: roomId
+                roomId: roomId,
+                messageType: "TEXT",
             };
             stompClient.send(`/app/sendMessage/${roomId}`, {}, JSON.stringify(message));
             setInput("");
+        }
+    };
+
+    const handleFileButtonClick = () => {
+        fileInputRef.current?.click();
+    };
+
+    const handleFileChange = async (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+        try {
+            setIsUploading(true);
+            const uploaded = await uploadFile(file);
+            const isImage = (uploaded.contentType || "").startsWith("image/");
+            const isPdf = uploaded.contentType === "application/pdf";
+            const message = {
+                sender: currentUser,
+                content: isImage ? "Image" : isPdf ? "PDF" : "File",
+                roomId: roomId,
+                messageType: isImage ? "IMAGE" : isPdf ? "PDF" : "FILE",
+                attachment: uploaded,
+            };
+            stompClient?.send(`/app/sendMessage/${roomId}`, {}, JSON.stringify(message));
+            toast.success("Attachment sent");
+        } catch (err) {
+            console.error(err);
+            toast.error("Upload failed");
+        } finally {
+            setIsUploading(false);
+            if (fileInputRef.current) fileInputRef.current.value = "";
         }
     };
 
@@ -83,6 +117,31 @@ const ChatPage = () => {
         setCurrentUser("");
         navigate("/");
     }
+
+    const renderMessageContent = (message) => {
+        if (message.messageType === "IMAGE" && message.attachment?.url) {
+            return (
+                <div className="mt-2">
+                    <img src={message.attachment.url} alt={message.attachment.fileName} className="max-w-xs rounded" />
+                </div>
+            );
+        }
+        if ((message.messageType === "PDF" || message.messageType === "FILE") && message.attachment?.url) {
+            return (
+                <div className="mt-2">
+                    <a
+                        href={message.attachment.url}
+                        target="_blank"
+                        rel="noreferrer"
+                        className="text-blue-200 underline break-all"
+                    >
+                        {message.attachment.fileName || "Download"}
+                    </a>
+                </div>
+            );
+        }
+        return <p className="text-white mt-1">{message.content}</p>;
+    };
 
     return (
         <div className="flex flex-col h-screen bg-gradient-to-r from-gray-700 to-gray-900">
@@ -114,7 +173,7 @@ const ChatPage = () => {
                                 />
                                 <div>
                                     <p className="font-semibold text-white">{message.sender}</p>
-                                    <p className="text-white mt-1">{message.content}</p>
+                                    {renderMessageContent(message)}
                                     <p className="text-xs text-gray-300 mt-1">{timeAgo(message.timeStamp)}</p>
                                 </div>
                             </div>
@@ -138,6 +197,24 @@ const ChatPage = () => {
                         placeholder="Type your message here..." 
                         className="flex-grow bg-gray-700 text-white rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                     />
+
+                    <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*,application/pdf"
+                        className="hidden"
+                        onChange={handleFileChange}
+                    />
+
+                    <button
+                        onClick={handleFileButtonClick}
+                        disabled={isUploading}
+                        title={isUploading ? "Uploading..." : "Attach file"}
+                        className={`bg-gray-700 hover:bg-gray-600 text-white rounded-full p-2 transition duration-300 ease-in-out ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    >
+                        <MdAttachFile size={24} />
+                    </button>
+
                     <button 
                         onClick={sendMessage}
                         className="bg-blue-500 hover:bg-blue-600 text-white rounded-full p-2 transition duration-300 ease-in-out"

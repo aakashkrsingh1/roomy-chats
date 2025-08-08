@@ -40,6 +40,8 @@ public class ChatController {
         message.setContent(request.getContent());
         message.setSender(request.getSender());
         message.setTimeStamp(LocalDateTime.now());
+        message.setMessageType(request.getMessageType() == null || request.getMessageType().isBlank() ? "TEXT" : request.getMessageType());
+        message.setAttachment(request.getAttachment());
 
         if(room!=null)
         {
