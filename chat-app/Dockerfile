@@ -6,7 +6,7 @@ COPY . .
 RUN mvn clean package -DskipTests
 
 # --- Stage 2: Run the JAR ---
-FROM openjdk:21-jdk-slim
+FROM eclipse-temurin:21-jre-jammy
 
 WORKDIR /app
 COPY --from=builder /build/target/chat-app-0.0.1-SNAPSHOT.jar app.jar
