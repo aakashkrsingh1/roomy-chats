@@ -38,8 +38,9 @@ const JoinCreateChat = () => {
                 setConnected(true);
                 navigate("/chat");
             } catch (error) {
-                if(error.status==400){
-                    toast.error(error.response.data);
+                const status = error?.response?.status;
+                if(status === 400){
+                    toast.error(error?.response?.data || "Room not found!");
                 } else {
                     toast.error("Error in Joining room.");
                 }
@@ -63,8 +64,9 @@ const JoinCreateChat = () => {
                 navigate("/chat");
             } catch (error) {
                 console.log(error);
-                if(error.status ===400){
-                    toast.error("Room already exists!");
+                const status = error?.response?.status;
+                if(status === 400){
+                    toast.error(error?.response?.data || "Room already exists!");
                 } else {
                     toast.error("Error in creating room");
                 }

@@ -22,15 +22,30 @@ public class RoomController {
     //create room
     @PostMapping
     public ResponseEntity<?> createRoom(@RequestBody String roomId){
-        if (roomRepository.findByRoomId(roomId)!=null){
-            //room already exists
-            return   ResponseEntity.badRequest().body("Room already exists.");
+        String normalizedRoomId = normalizeRoomId(roomId);
+        if (normalizedRoomId == null) {
+            return ResponseEntity.badRequest().body("roomId is required.");
+        }
+
+        if (roomRepository.findByRoomId(normalizedRoomId) != null) {
+            return ResponseEntity.badRequest().body("Room already exists.");
         }
 
         Room room = new Room();
-        room.setRoomId(roomId);
-        Room savedRoom= roomRepository.save(room);
-        return ResponseEntity.status(HttpStatus.CREATED).body(room);
+        room.setRoomId(normalizedRoomId);
+        Room savedRoom = roomRepository.save(room);
+        return ResponseEntity.status(HttpStatus.CREATED).body(savedRoom);
+    }
+
+    private static String normalizeRoomId(String raw) {
+        if (raw == null) return null;
+        String s = raw.trim();
+        if (s.isEmpty()) return null;
+        // Some clients accidentally send JSON-string encoded values like "\"room1\""
+        if (s.length() >= 2 && s.startsWith("\"") && s.endsWith("\"")) {
+            s = s.substring(1, s.length() - 1).trim();
+        }
+        return s.isEmpty() ? null : s;
     }
     //get room
     @GetMapping("/{roomId}")
