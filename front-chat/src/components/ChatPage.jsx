@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { MdAttachFile, MdSend } from "react-icons/md";
+import { MdAttachFile, MdSend, MdLogout } from "react-icons/md";
 import useChatContext from "../context/ChatContext";
 import { useNavigate } from "react-router";
 import SockJS from "sockjs-client";
@@ -140,41 +140,44 @@ const ChatPage = () => {
                 </div>
             );
         }
-        return <p className="text-white mt-1">{message.content}</p>;
+    return <p className="chat-message-text">{message.content}</p>;
     };
 
     return (
-        <div className="flex flex-col h-screen relative">
-            <header className="retro-header p-4">
-                <div className="container mx-auto flex flex-col lg:flex-row lg:justify-between lg:items-center gap-4">
-                    <h1 className="text-2xl font-bold retro-title">Roomy Chat</h1>
-                    <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-4 gap-2 text-sm retro-subtitle">
-                        <span>Room: <span className="font-semibold text-white">{roomId}</span></span>
-                        <span>User: <span className="font-semibold text-white">{currentUser}</span></span>
+        <div className="chat-page flex flex-col h-screen relative">
+            <header className="retro-header chat-header">
+                <div className="chat-shell flex flex-col lg:flex-row lg:justify-between lg:items-center gap-3">
+                    <div>
+                        <h1 className="chat-title font-bold">Roomy Chat</h1>
+                        <p className="chat-kicker">Room {roomId}</p>
+                    </div>
+                    <div className="chat-meta flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                        <span className="chat-pill">User <strong>{currentUser}</strong></span>
                         <button 
                             onClick={handleLogOut} 
-                            className="retro-btn retro-btn-danger px-4 py-2 rounded-full"
+                            className="chat-leave-btn rounded-full"
                         >
-                            Leave Room
+                            <MdLogout size={18} />
+                            Leave
                         </button>
                     </div>
                 </div>
             </header>
 
-            <main ref={chatBoxRef} className="flex-grow overflow-auto p-6 space-y-4 retro-chat-window mx-4 mt-6 rounded-[28px]">
+            <main ref={chatBoxRef} className="chat-window flex-grow overflow-auto retro-chat-window rounded-[22px]">
                 {messages.map((message, index) => (
-                    <div key={index} className={`flex ${message.sender === currentUser ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`max-w-xs lg:max-w-md xl:max-w-lg retro-message ${message.sender === currentUser ? 'retro-message-self' : 'retro-message-other'} rounded-3xl p-4`}> 
+                    <div key={index} className={`chat-row flex ${message.sender === currentUser ? 'justify-end' : 'justify-start'}`}>
+                        <div className={`chat-bubble ${message.sender === currentUser ? 'chat-bubble-self' : 'chat-bubble-other'} rounded-2xl`}> 
                             <div className="flex items-start gap-3">
                                 <img 
-                                    className="h-10 w-10 rounded-full border-2 border-white/15 shadow-lg"
+                                    className="chat-avatar rounded-full border-2 border-white/15 shadow-lg"
                                     src={`https://api.dicebear.com/6.x/avataaars/svg?seed=${message.sender}`} 
                                     alt={`${message.sender}'s avatar`}
                                 />
                                 <div>
-                                    <p className="font-semibold text-white">{message.sender}</p>
+                                    <p className="chat-sender font-semibold">{message.sender}</p>
                                     {renderMessageContent(message)}
-                                    <p className="text-xs text-gray-300 mt-2">{timeAgo(message.timeStamp)}</p>
+                                    <p className="chat-time mt-2">{timeAgo(message.timeStamp)}</p>
                                 </div>
                             </div>
                         </div>
@@ -182,8 +185,8 @@ const ChatPage = () => {
                 ))}
             </main>
 
-            <div className="p-4 mx-4 mt-4 retro-card rounded-full border border-white/10">
-                <div className="container mx-auto flex flex-col md:flex-row items-center gap-3">
+            <div className="chat-composer rounded-[24px]">
+                <div className="chat-shell flex flex-col md:flex-row items-center gap-3">
                     <input 
                         type="text" 
                         value={input}
@@ -195,7 +198,7 @@ const ChatPage = () => {
                             }
                         }}
                         placeholder="Type your message here..." 
-                        className="flex-grow retro-input rounded-full px-4 py-3 focus:outline-none"
+                        className="chat-input flex-grow rounded-full focus:outline-none"
                     />
 
                     <input
@@ -210,16 +213,16 @@ const ChatPage = () => {
                         onClick={handleFileButtonClick}
                         disabled={isUploading}
                         title={isUploading ? "Uploading..." : "Attach file"}
-                        className={`retro-btn retro-btn-secondary rounded-full p-3 ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
+                        className={`chat-icon-btn chat-attach-btn rounded-full ${isUploading ? 'opacity-50 cursor-not-allowed' : ''}`}
                     >
-                        <MdAttachFile size={24} />
+                        <MdAttachFile size={22} />
                     </button>
 
                     <button 
                         onClick={sendMessage}
-                        className="retro-btn retro-btn-primary rounded-full p-3"
+                        className="chat-icon-btn chat-send-btn rounded-full"
                     >
-                        <MdSend size={24} />
+                        <MdSend size={22} />
                     </button>
                 </div>
             </div>

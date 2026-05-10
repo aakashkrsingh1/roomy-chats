@@ -113,6 +113,12 @@ export FRONTEND_BASE_URL=http://localhost:5173
 The backend Dockerfile builds a JAR and exposes port `8080`.
 `chat-app/docker-compose.yml` also brings up MongoDB and the backend in a shared network.
 
+## Deployment on Render + MongoDB Atlas
+- Deploy the backend using `chat-app/Dockerfile` as a Render Web Service.
+- Use MongoDB Atlas shared tier (`M0`, `M2`, or `M5`) for a database that does not pause.
+- Set `SPRING_DATA_MONGODB_URI` in Render to the Atlas connection string.
+- Keep the backend healthy with a free UptimeRobot monitor pinging `/health`.
+
 ## Environment example
 The backend example env file is available at `chat-app/.env.example`.
 

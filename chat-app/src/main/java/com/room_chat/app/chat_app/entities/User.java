@@ -1,27 +1,25 @@
 package com.room_chat.app.chat_app.entities;
 
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.ArrayList;
 import java.util.List;
 
-@Document(collection = "rooms")
+@Document(collection = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Room {
-    @Id
-    private  String id; //Mongo db : unique identifier
+public class User {
 
-    @Indexed(unique = true)
-    private  String roomId;
-    private List<Message> messages= new ArrayList<>();
+    @Id
+    private String id;
+    private String username;
+    private String password;
+    private List<String> roles;
+    private boolean enabled = true;
 }

@@ -2,16 +2,13 @@ package com.room_chat.app.chat_app.controllers;
 
 
 import com.room_chat.app.chat_app.entities.Message;
-import com.room_chat.app.chat_app.entities.Room;
 import com.room_chat.app.chat_app.payloads.MessageRequest;
-import com.room_chat.app.chat_app.repositories.RoomRepository;
+import com.room_chat.app.chat_app.services.MessageService;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
-
-import java.time.LocalDateTime;
 
 /*
 Chat Concepts:
@@ -20,11 +17,10 @@ Chat Concepts:
 @Controller
 public class ChatController {
 
+    private final MessageService messageService;
 
-    private RoomRepository roomRepository;
-
-    public ChatController(RoomRepository roomRepository) {
-        this.roomRepository = roomRepository;
+    public ChatController(MessageService messageService) {
+        this.messageService = messageService;
     }
 
     //for sending and receiving messages
@@ -35,21 +31,6 @@ public class ChatController {
             @DestinationVariable String roomId,
             @RequestBody MessageRequest request
     ){
-        Room room = roomRepository.findByRoomId(request.getRoomId());
-        Message message= new Message();
-        message.setContent(request.getContent());
-        message.setSender(request.getSender());
-        message.setTimeStamp(LocalDateTime.now());
-        message.setMessageType(request.getMessageType() == null || request.getMessageType().isBlank() ? "TEXT" : request.getMessageType());
-        message.setAttachment(request.getAttachment());
-
-        if(room!=null)
-        {
-            room.getMessages().add(message);
-            roomRepository.save(room);
-        }else{
-            throw new RuntimeException("room not found!");
-        }
-        return  message;
+        return messageService.sendMessage(roomId, request);
     }
 }
