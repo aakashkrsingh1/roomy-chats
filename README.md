@@ -1,40 +1,126 @@
 # Roomy Chats
 
-A real-time chat application with:
+A full-stack real-time chat application with:
 
-- **Frontend**: React + Vite (`/frontend`)
-- **Backend**: Spring Boot + MongoDB (`/backend`)
+- **Frontend:** React + Vite (`front-chat/`)
+- **Backend:** Spring Boot + MongoDB (`chat-app/`)
+- **Docker Compose:** MongoDB + backend service in `chat-app/docker-compose.yml`
 
-## Getting Started
+---
 
-See `front-chat/README.md` and `chat-app/README.md` for setup instructions.
+## Quick Full-Stack Setup
 
-## Check this out: 
-https://roomy-chats.vercel.app/
+### 1. Start the backend stack
 
-## 🚀 Deployment Info
+```bash
+cd /Users/aakashkrsingh1/IdeaProjects/roomy-chats/chat-app
+docker compose up --build
+```
 
-### 🖥️ Frontend  
-- **Hosted On:** [Vercel](https://vercel.com)  
-- **Tech Stack:** Vite + React  
-- **Deployment Flow:**  
-  - Automatically deployed from the `front-chat` folder of the `main` branch.  
-  - Uses [Vercel Dashboard](https://vercel.com/dashboard) for project configuration.  
-  - Environment variables like `VITE_BACKEND_BASE_URL` are managed securely via Vercel project settings.  
+This starts:
+- `mongo` on host port `27018`
+- backend Spring Boot app on `http://localhost:8080`
 
-### ⚙️ Backend  
-- **Hosted On:** [Render](https://render.com)  
-- **Tech Stack:** Spring Boot (Java)  
-- **Containerized Using:** Docker  
-- **Deployment Flow:**  
-  - GitHub Actions workflow builds and pushes a Docker image to Docker Hub whenever changes are pushed to `main`.  
-  - Render is configured to automatically pull the latest image from Docker Hub and redeploy the backend.  
-  - Environment variables such as MongoDB URI and CORS origins are managed via the Render Dashboard.
-## Screenshots: 
-- **./**
-  - <img width="1517" height="1167" alt="image" src="https://github.com/user-attachments/assets/f1f91f3b-250f-41d6-8d7e-e6e606c33014" />
-- **./chat**
-  - <img width="1517" height="1167" alt="image" src="https://github.com/user-attachments/assets/feb2fe14-c513-495f-9d67-77e2cd96cc8c" />
+If you prefer the legacy CLI:
+
+```bash
+docker-compose up --build
+```
+
+### 2. Start the frontend
+
+```bash
+cd /Users/aakashkrsingh1/IdeaProjects/roomy-chats/front-chat
+npm install
+VITE_BACKEND_BASE_URL=http://localhost:8080 npm run dev
+```
+
+Then open the URL shown by Vite (usually `http://localhost:5173`).
+
+### 3. Build production outputs
+
+Frontend build:
+
+```bash
+cd /Users/aakashkrsingh1/IdeaProjects/roomy-chats/front-chat
+npm run build
+```
+
+Backend build:
+
+```bash
+cd /Users/aakashkrsingh1/IdeaProjects/roomy-chats/chat-app
+./mvnw clean package
+java -jar target/chat-app-0.0.1-SNAPSHOT.jar
+```
+
+---
+
+## Frontend details (`front-chat/`)
+
+### Important files
+- `package.json` — npm scripts for `dev`, `build`, `preview`, and `lint`
+- `src/config/AxiosHelper.js` — uses `VITE_BACKEND_BASE_URL` or defaults to `http://localhost:8080`
+- `src/components/JoinCreateChat.jsx` — lobby form UI
+- `src/components/ChatPage.jsx` — chat UI and WebSocket client
+
+### Local env variables
+Use `VITE_BACKEND_BASE_URL=http://localhost:8080` when running locally.
+
+---
+
+## Backend details (`chat-app/`)
+
+### Important files
+- `pom.xml` — Spring Boot dependencies and Java 21 build configuration
+- `Dockerfile` — multi-stage build for a runnable `app.jar`
+- `docker-compose.yml` — launches MongoDB and the backend together
+- `src/main/resources/application.properties` — config values:
+  - `spring.data.mongodb.uri=${SPRING_DATA_MONGODB_URI:${MONGODB_URI}}`
+  - `spring.data.mongodb.database=chat-database`
+  - `frontend.base.url=${FRONTEND_BASE_URL}`
+
+### Default local backend environment
+The backend expects env vars like:
+- `SPRING_DATA_MONGODB_URI` (or `MONGODB_URI`)
+- `FRONTEND_BASE_URL`
+
+When using Docker Compose, `SPRING_DATA_MONGODB_URI` is already set to:
+
+```text
+mongodb://mongo:27017/chatapp
+```
+
+### Build and run locally without Docker
+
+```bash
+cd /Users/aakashkrsingh1/IdeaProjects/roomy-chats/chat-app
+./mvnw clean package
+java -jar target/chat-app-0.0.1-SNAPSHOT.jar
+```
+
+If you want local MongoDB, point env to your instance:
+
+```bash
+export SPRING_DATA_MONGODB_URI=mongodb://localhost:27017/chatapp
+export FRONTEND_BASE_URL=http://localhost:5173
+```
+
+---
+
+## Docker notes
+
+The backend Dockerfile builds a JAR and exposes port `8080`.
+`chat-app/docker-compose.yml` also brings up MongoDB and the backend in a shared network.
+
+## Environment example
+The backend example env file is available at `chat-app/.env.example`.
+
+## Notes
+
+- Use `docker compose up --build` to run backend + database together.
+- Use `VITE_BACKEND_BASE_URL=http://localhost:8080 npm run dev` to connect frontend to the local backend.
+- The root README now contains the full guide in one place.
 
 
 

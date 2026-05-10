@@ -1,12 +1,35 @@
-# React + Vite
+# Frontend — Roomy Chats
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+This is the frontend for Roomy Chats, built with React + Vite + Tailwind CSS.
 
-Currently, two official plugins are available:
+## Run locally
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+```bash
+cd /Users/aakashkrsingh1/IdeaProjects/roomy-chats/front-chat
+npm install
+VITE_BACKEND_BASE_URL=http://localhost:8080 npm run dev
+```
 
-## Expanding the ESLint configuration
+Open the URL shown in the terminal (usually `http://localhost:5173`).
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+## Build
+
+```bash
+npm run build
+```
+
+## Preview production build
+
+```bash
+npm run preview
+```
+
+## Notes
+
+- The frontend expects the backend API at `VITE_BACKEND_BASE_URL`.
+- For local testing with the included backend, use `http://localhost:8080`.
+- If you want to permanently configure this for Vite, add a `.env` file with:
+
+```env
+VITE_BACKEND_BASE_URL=http://localhost:8080
+```

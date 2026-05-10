@@ -78,11 +78,11 @@ const JoinCreateChat = () => {
 
     if (isLoading) {
         return (
-            <div className="min-h-screen flex items-center justify-center bg-gradient-to-r from-gray-700 to-gray-900">
-                <div className="p-8 bg-gray-800 rounded-lg shadow-xl text-center max-w-md w-full">
-                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-blue-500 mx-auto mb-4"></div>
-                    <h2 className="text-2xl font-bold text-white mb-4">Loading Roomy Chat...</h2>
-                    <p className="text-gray-300">
+            <div className="min-h-screen flex items-center justify-center relative">
+                <div className="p-8 retro-card rounded-3xl text-center max-w-md w-full">
+                    <div className="animate-spin rounded-full h-16 w-16 border-t-4 border-b-4 border-cyan-300 mx-auto mb-4"></div>
+                    <h2 className="text-2xl font-bold retro-title mb-4">Loading Roomy Chat...</h2>
+                    <p className="text-sm retro-subtitle">
                         The backend is waking up. This might take up to two minutes for the first request.
                         Subsequent operations will be much faster.
                     </p>
@@ -92,20 +92,16 @@ const JoinCreateChat = () => {
     }
 
     return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-gray-700 to-gray-900">
-            <div className="p-8 bg-gray-800 rounded-lg shadow-xl w-full max-w-md transition-all duration-300 ease-in-out transform hover:scale-105">
+        <div className="min-h-screen flex flex-col items-center justify-center relative px-4 py-10">
+            <div className="p-8 retro-card rounded-[32px] shadow-xl w-full max-w-md transition-transform duration-300 ease-in-out hover:-translate-y-1">
                 <div className="flex justify-center mb-6">
                     <img className="w-24 h-24 object-contain" src={chatIcon} alt="Roomy Chat Icon" />
                 </div>
-                <h1 className="text-3xl font-bold text-center text-white mb-2">
-                    Roomy Chat
-                </h1>
-                <p className="text-center text-gray-400 mb-8">Join or Create a Room</p>
+                <h1 className="text-3xl font-bold text-center retro-title mb-2">Roomy Chat</h1>
+                <p className="text-center retro-subtitle mb-8">Join or Create a Room</p>
                 <div className="space-y-6">
                     <div>
-                        <label htmlFor="userName" className="block text-sm font-medium text-gray-300 mb-2">
-                            Your Name
-                        </label>
+                        <label htmlFor="userName" className="block text-sm font-medium retro-subtitle mb-2">Your Name</label>
                         <input
                             type="text"
                             id="userName"
@@ -113,13 +109,11 @@ const JoinCreateChat = () => {
                             value={detail.userName}
                             onChange={handleFormInputChange}
                             placeholder="Enter your name"
-                            className="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                            className="w-full px-4 py-3 retro-input rounded-xl focus:outline-none transition-all duration-300"
                         />
                     </div>
                     <div>
-                        <label htmlFor="roomId" className="block text-sm font-medium text-gray-300 mb-2">
-                            Room ID
-                        </label>
+                        <label htmlFor="roomId" className="block text-sm font-medium retro-subtitle mb-2">Room ID</label>
                         <input
                             type="text"
                             id="roomId"
@@ -127,42 +121,42 @@ const JoinCreateChat = () => {
                             value={detail.roomId}
                             onChange={handleFormInputChange}
                             placeholder="Enter room ID"
-                            className="w-full px-4 py-2 bg-gray-700 text-white rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-300"
+                            className="w-full px-4 py-3 retro-input rounded-xl focus:outline-none transition-all duration-300"
                         />
                     </div>
-                    <div className="flex gap-4 justify-center mt-8">
+                    <div className="flex flex-col sm:flex-row gap-4 justify-center mt-8">
                         <button
                             onClick={joinChat}
-                            className="px-6 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-300"
+                            className="px-6 py-3 retro-btn retro-btn-primary rounded-full"
                         >
                             Join
                         </button>
                         <button
                             onClick={createRoom}
-                            className="px-6 py-2 bg-orange-600 text-white rounded-full hover:bg-orange-700 focus:outline-none focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 focus:ring-offset-gray-800 transition-all duration-300"
+                            className="px-6 py-3 retro-btn retro-btn-secondary rounded-full"
                         >
                             Create
                         </button>
                     </div>
                 </div>
             </div>
-            <footer className="mt-8 text-center text-gray-500 text-xs">
+            <footer className="mt-8 text-center text-sm text-gray-400">
                 <p>
-                    Developed by{" "}
+                    Developed by{' '}
                     <a
                         href="https://www.linkedin.com/in/akash-kumar-singh-180a4916b/"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-blue-400 transition-colors duration-300"
+                        className="retro-footer-link transition-colors duration-300"
                     >
                         Akash KS
-                    </a>{" "}
-                    |{" "}
+                    </a>{' '}
+                    |{' '}
                     <a
                         href="https://github.com/aakashkrsingh1"
                         target="_blank"
                         rel="noopener noreferrer"
-                        className="hover:text-blue-400 transition-colors duration-300"
+                        className="retro-footer-link transition-colors duration-300"
                     >
                         GitHub
                     </a>
